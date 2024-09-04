@@ -177,32 +177,32 @@ def on_message(client, userdata, msg):
         if msg.topic in config["TOPICS"]:
             if msg.payload != "" and msg.payload != b"":
                 last_changed = int(time())
-                grid_power = float(msg.payload) if msg.topic == config["TOPICS"]["topic_total_power"]
-                grid_current = float(msg.payload) if msg.topic == config["TOPICS"]["topic_total_current"]
-                grid_voltage = float(msg.payload) if msg.topic == config["TOPICS"]["topic_total_voltage"]
-                grid_forward = float(msg.payload) if msg.topic == config["TOPICS"]["topic_total_energy_in"]
-                grid_reverse = float(msg.payload) if msg.topic == config["TOPICS"]["topic_total_energy_out"]
+                grid_power = float(msg.payload) if msg.topic == config["TOPICS"]["topic_total_power"] else grid_power = grid_power
+                grid_current = float(msg.payload) if msg.topic == config["TOPICS"]["topic_total_current"] else grid_current = grid_current
+                grid_voltage = float(msg.payload) if msg.topic == config["TOPICS"]["topic_total_voltage"] else grid_voltage = grid_voltage
+                grid_forward = float(msg.payload) if msg.topic == config["TOPICS"]["topic_total_energy_in"] else grid_forward = grid_forward
+                grid_reverse = float(msg.payload) if msg.topic == config["TOPICS"]["topic_total_energy_out"] else grid_reverse = grid_reverse
 
-                grid_L1_power = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L1_power"]
-                grid_L1_current = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L1_current"]
-                grid_L1_voltage = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L1_voltage"]
-                grid_L1_frequency = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L1_frequency"]
-                grid_L1_forward = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L1_energy_in"]
-                grid_L1_reverse = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L1_energy_out"]
+                grid_L1_power = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L1_power"] else grid_L1_power = grid_L1_power
+                grid_L1_current = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L1_current"] else grid_L1_current = grid_L1_current
+                grid_L1_voltage = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L1_voltage"] else grid_L1_voltage = grid_L1_voltage
+                grid_L1_frequency = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L1_frequency"] else grid_L1_frequency = grid_L1_frequency
+                grid_L1_forward = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L1_energy_in"] else grid_L1_forward = grid_L1_forward
+                grid_L1_reverse = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L1_energy_out"] else grid_L1_reverse = grid_L1_reverse
                 
-                grid_L2_power = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L2_power"]
-                grid_L2_current = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L2_current"]
-                grid_L2_voltage = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L2_voltage"]
-                grid_L2_frequency = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L2_frequency"]
-                grid_L2_forward = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L2_energy_in"]
-                grid_L2_reverse = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L2_energy_out"]
+                grid_L2_power = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L2_power"] else grid_L2_power = grid_L2_power
+                grid_L2_current = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L2_current"] else grid_L2_current = grid_L2_current
+                grid_L2_voltage = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L2_voltage"] else grid_L2_voltage = grid_L2_voltage
+                grid_L2_frequency = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L2_frequency"] else grid_L2_frequency = grid_L2_frequency
+                grid_L2_forward = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L2_energy_in"] else grid_L2_forward = grid_L2_forward
+                grid_L2_reverse = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L2_energy_out"] else grid_L2_reverse = grid_L2_reverse
 
-                grid_L3_power = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L3_power"]
-                grid_L3_current = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L3_current"]
-                grid_L3_voltage = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L3_voltage"]
-                grid_L3_frequency = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L3_frequency"]
-                grid_L3_forward = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L3_energy_in"]
-                grid_L3_reverse = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L3_energy_out"]
+                grid_L3_power = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L3_power"] else grid_L3_power = grid_L3_power
+                grid_L3_current = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L3_current"] else grid_L3_current = grid_L3_current
+                grid_L3_voltage = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L3_voltage"] else grid_L3_voltage = grid_L3_voltage
+                grid_L3_frequency = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L3_frequency"] else grid_L3_frequency = grid_L3_frequency
+                grid_L3_forward = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L3_energy_in"] else grid_L3_forward = grid_L3_forward
+                grid_L3_reverse = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L3_energy_out"] else grid_L3_reverse = grid_L3_reverse
             else:
                 logging.warning(
                     "Received MQTT message was empty and therefore it was ignored"
