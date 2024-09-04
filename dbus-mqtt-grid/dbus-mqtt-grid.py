@@ -504,7 +504,7 @@ def main():
     DBusGMainLoop(set_as_default=True)
 
     # MQTT setup
-    client = mqtt.Client(
+    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, 
         "MqttGrid_"
         + get_vrm_portal_id()
         + "_"
