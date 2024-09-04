@@ -296,12 +296,6 @@ def on_message(client, userdata, msg):
                         else 0
                     )
                         
-                        
-                    else:
-                        logging.error(
-                            'Received JSON MQTT message grid object is not of type dictionary. Expected at least: {"grid": {"power": 0.0}"}'
-                        )
-                        logging.debug("MQTT payload: " + str(msg.payload)[1:])
                 else:
                     logging.error(
                         'Received JSON MQTT message does not include a grid object. Expected at least: {"grid": {"power": 0.0}"}'
