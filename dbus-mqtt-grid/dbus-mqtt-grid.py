@@ -175,200 +175,35 @@ def on_message(client, userdata, msg):
         global grid_L3_power, grid_L3_current, grid_L3_voltage, grid_L3_frequency, grid_L3_forward, grid_L3_reverse
 
         # get JSON from topic
-        if msg.topic == config["MQTT"]["topic"]:
+        if msg.topic in config["TOPICS"]:
             if msg.payload != "" and msg.payload != b"":
-                jsonpayload = json.loads(msg.payload)
-
                 last_changed = int(time())
+                grid_power = float(msg.payload) if msg.topic == config["TOPICS"]["topic_total_power"]
+                grid_current = float(msg.payload) if msg.topic == config["TOPICS"]["topic_total_current"]
+                grid_voltage = float(msg.payload) if msg.topic == config["TOPICS"]["topic_total_voltage"]
+                grid_forward = float(msg.payload) if msg.topic == config["TOPICS"]["topic_total_energy_in"]
+                grid_reverse = float(msg.payload) if msg.topic == config["TOPICS"]["topic_total_energy_out"]
 
-                if "grid" in jsonpayload:
-                    if isinstance(jsonpayload["grid"], dict):
-                        if "power" in jsonpayload["grid"]:
-                            grid_power = float(jsonpayload["grid"]["power"])
-                            grid_voltage = (
-                                float(jsonpayload["grid"]["voltage"])
-                                if "voltage" in jsonpayload["grid"]
-                                else float(config["DEFAULT"]["voltage"])
-                            )
-                            grid_current = (
-                                float(jsonpayload["grid"]["current"])
-                                if "current" in jsonpayload["grid"]
-                                else (
-                                    grid_power / grid_voltage
-                                    if grid_voltage != 0
-                                    else 0
-                                )
-                            )
-                            grid_forward = (
-                                float(jsonpayload["grid"]["energy_forward"])
-                                if "energy_forward" in jsonpayload["grid"]
-                                else None
-                            )
-                            grid_reverse = (
-                                float(jsonpayload["grid"]["energy_reverse"])
-                                if "energy_reverse" in jsonpayload["grid"]
-                                else None
-                            )
+                grid_L1_power = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L1_power"]
+                grid_L1_current = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L1_current"]
+                grid_L1_voltage = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L1_voltage"]
+                grid_L1_frequency = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L1_frequency"]
+                grid_L1_forward = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L1_energy_in"]
+                grid_L1_reverse = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L1_energy_out"]
+                
+                grid_L2_power = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L2_power"]
+                grid_L2_current = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L2_current"]
+                grid_L2_voltage = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L2_voltage"]
+                grid_L2_frequency = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L2_frequency"]
+                grid_L2_forward = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L2_energy_in"]
+                grid_L2_reverse = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L2_energy_out"]
 
-                            # check if L1 and L1 -> power exists
-                            if (
-                                "L1" in jsonpayload["grid"]
-                                and "power" in jsonpayload["grid"]["L1"]
-                            ):
-                                grid_L1_power = float(
-                                    jsonpayload["grid"]["L1"]["power"]
-                                )
-                                grid_L1_voltage = (
-                                    float(jsonpayload["grid"]["L1"]["voltage"])
-                                    if "voltage" in jsonpayload["grid"]["L1"]
-                                    else float(config["DEFAULT"]["voltage"])
-                                )
-                                grid_L1_current = (
-                                    float(jsonpayload["grid"]["L1"]["current"])
-                                    if "current" in jsonpayload["grid"]["L1"]
-                                    else (
-                                        grid_L1_power / grid_L1_voltage
-                                        if grid_L1_voltage != 0
-                                        else 0
-                                    )
-                                )
-                                grid_L1_frequency = (
-                                    float(jsonpayload["grid"]["L1"]["frequency"])
-                                    if "frequency" in jsonpayload["grid"]["L1"]
-                                    else None
-                                )
-                                grid_L1_forward = (
-                                    float(jsonpayload["grid"]["L1"]["energy_forward"])
-                                    if "energy_forward" in jsonpayload["grid"]["L1"]
-                                    else 0
-                                )
-                                grid_L1_reverse = (
-                                    float(jsonpayload["grid"]["L1"]["energy_reverse"])
-                                    if "energy_reverse" in jsonpayload["grid"]["L1"]
-                                    else 0
-                                )
-
-                            # check if L2 and L2 -> power exists
-                            if (
-                                "L2" in jsonpayload["grid"]
-                                and "power" in jsonpayload["grid"]["L2"]
-                            ):
-                                grid_L2_power = float(
-                                    jsonpayload["grid"]["L2"]["power"]
-                                )
-                                grid_L2_voltage = (
-                                    float(jsonpayload["grid"]["L2"]["voltage"])
-                                    if "voltage" in jsonpayload["grid"]["L2"]
-                                    else float(config["DEFAULT"]["voltage"])
-                                )
-                                grid_L2_current = (
-                                    float(jsonpayload["grid"]["L2"]["current"])
-                                    if "current" in jsonpayload["grid"]["L2"]
-                                    else (
-                                        grid_L2_power / grid_L2_voltage
-                                        if grid_L2_voltage != 0
-                                        else 0
-                                    )
-                                )
-                                grid_L2_frequency = (
-                                    float(jsonpayload["grid"]["L2"]["frequency"])
-                                    if "frequency" in jsonpayload["grid"]["L2"]
-                                    else None
-                                )
-                                grid_L2_forward = (
-                                    float(jsonpayload["grid"]["L2"]["energy_forward"])
-                                    if "energy_forward" in jsonpayload["grid"]["L2"]
-                                    else 0
-                                )
-                                grid_L2_reverse = (
-                                    float(jsonpayload["grid"]["L2"]["energy_reverse"])
-                                    if "energy_reverse" in jsonpayload["grid"]["L2"]
-                                    else 0
-                                )
-
-                            # check if L3 and L3 -> power exists
-                            if (
-                                "L3" in jsonpayload["grid"]
-                                and "power" in jsonpayload["grid"]["L3"]
-                            ):
-                                grid_L3_power = float(
-                                    jsonpayload["grid"]["L3"]["power"]
-                                )
-                                grid_L3_voltage = (
-                                    float(jsonpayload["grid"]["L3"]["voltage"])
-                                    if "voltage" in jsonpayload["grid"]["L3"]
-                                    else float(config["DEFAULT"]["voltage"])
-                                )
-                                grid_L3_current = (
-                                    float(jsonpayload["grid"]["L3"]["current"])
-                                    if "current" in jsonpayload["grid"]["L3"]
-                                    else (
-                                        grid_L3_power / grid_L3_voltage
-                                        if grid_L3_voltage != 0
-                                        else 0
-                                    )
-                                )
-                                grid_L3_frequency = (
-                                    float(jsonpayload["grid"]["L3"]["frequency"])
-                                    if "frequency" in jsonpayload["grid"]["L3"]
-                                    else None
-                                )
-                                grid_L3_forward = (
-                                    float(jsonpayload["grid"]["L3"]["energy_forward"])
-                                    if "energy_forward" in jsonpayload["grid"]["L3"]
-                                    else 0
-                                )
-                                grid_L3_reverse = (
-                                    float(jsonpayload["grid"]["L3"]["energy_reverse"])
-                                    if "energy_reverse" in jsonpayload["grid"]["L3"]
-                                    else 0
-                                )
-                        # for Tasmota support
-                        # the power and power_L1-3 values have to be sent within the same second or
-                        # power as last one, else on startup the phases are not correctly recognized
-                        elif "power_L1" in jsonpayload["grid"]:
-                            grid_L1_power = float(jsonpayload["grid"]["power_L1"])
-                            grid_L1_voltage = float(config["DEFAULT"]["voltage"])
-                            grid_L1_current = grid_L1_power / float(
-                                config["DEFAULT"]["voltage"]
-                            )
-                            grid_L1_frequency = None
-                            grid_L1_forward = 0
-                            grid_L1_reverse = 0
-                        elif "power_L2" in jsonpayload["grid"]:
-                            grid_L2_power = float(jsonpayload["grid"]["power_L2"])
-                            grid_L2_voltage = float(config["DEFAULT"]["voltage"])
-                            grid_L2_current = grid_L2_power / float(
-                                config["DEFAULT"]["voltage"]
-                            )
-                            grid_L2_frequency = None
-                            grid_L2_forward = 0
-                            grid_L2_reverse = 0
-                        elif "power_L3" in jsonpayload["grid"]:
-                            grid_L3_power = float(jsonpayload["grid"]["power_L3"])
-                            grid_L3_voltage = float(config["DEFAULT"]["voltage"])
-                            grid_L3_current = grid_L3_power / float(
-                                config["DEFAULT"]["voltage"]
-                            )
-                            grid_L3_frequency = None
-                            grid_L3_forward = 0
-                            grid_L3_reverse = 0
-                        else:
-                            logging.error(
-                                'Received JSON MQTT message does not include a power object in the grid object. Expected at least: {"grid": {"power": 0.0}"}'
-                            )
-                            logging.debug("MQTT payload: " + str(msg.payload)[1:])
-                    else:
-                        logging.error(
-                            'Received JSON MQTT message grid object is not of type dictionary. Expected at least: {"grid": {"power": 0.0}"}'
-                        )
-                        logging.debug("MQTT payload: " + str(msg.payload)[1:])
-                else:
-                    logging.error(
-                        'Received JSON MQTT message does not include a grid object. Expected at least: {"grid": {"power": 0.0}"}'
-                    )
-                    logging.debug("MQTT payload: " + str(msg.payload)[1:])
-
+                grid_L3_power = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L3_power"]
+                grid_L3_current = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L3_current"]
+                grid_L3_voltage = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L3_voltage"]
+                grid_L3_frequency = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L3_frequency"]
+                grid_L3_forward = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L3_energy_in"]
+                grid_L3_reverse = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L3_energy_out"]
             else:
                 logging.warning(
                     "Received JSON MQTT message was empty and therefore it was ignored"
