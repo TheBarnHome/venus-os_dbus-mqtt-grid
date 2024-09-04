@@ -6,7 +6,6 @@ import logging
 import sys
 import os
 from time import sleep, time
-import json
 import paho.mqtt.client as mqtt
 import configparser  # for config/ini file
 import _thread
@@ -174,7 +173,7 @@ def on_message(client, userdata, msg):
         global grid_L2_power, grid_L2_current, grid_L2_voltage, grid_L2_frequency, grid_L2_forward, grid_L2_reverse
         global grid_L3_power, grid_L3_current, grid_L3_voltage, grid_L3_frequency, grid_L3_forward, grid_L3_reverse
 
-        # get JSON from topic
+        # get from topic
         if msg.topic in config["TOPICS"]:
             if msg.payload != "" and msg.payload != b"":
                 last_changed = int(time())
@@ -206,12 +205,11 @@ def on_message(client, userdata, msg):
                 grid_L3_reverse = float(msg.payload) if msg.topic == config["TOPICS"]["topic_L3_energy_out"]
             else:
                 logging.warning(
-                    "Received JSON MQTT message was empty and therefore it was ignored"
+                    "Received MQTT message was empty and therefore it was ignored"
                 )
                 logging.debug("MQTT payload: " + str(msg.payload)[1:])
 
     except ValueError as e:
-        logging.error("Received message is not a valid JSON. %s" % e)
         logging.debug("MQTT payload: " + str(msg.payload)[1:])
 
     except Exception:
@@ -539,7 +537,7 @@ def main():
     )
     client.loop_start()
 
-    # wait to receive first data, else the JSON is empty and phase setup won't work
+    # wait to receive first data, else the MQTT message is empty and phase setup won't work
     i = 0
     while grid_power == -1:
         if i % 12 != 0 or i == 0:
