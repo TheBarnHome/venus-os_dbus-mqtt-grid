@@ -176,7 +176,6 @@ def on_message(client, userdata, msg):
 
         # get JSON from topic
         if msg.topic == config["MQTT"]["topic"]:
-            logging.warning(msg.payload)
             if msg.payload != "" and msg.payload != b"":
                 jsonpayload = json.loads(msg.payload)
 
