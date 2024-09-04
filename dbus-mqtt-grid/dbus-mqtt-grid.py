@@ -176,6 +176,7 @@ def on_message(client, userdata, msg):
         global grid_L3_power, grid_L3_current, grid_L3_voltage, grid_L3_frequency, grid_L3_forward, grid_L3_reverse
 
         # get from topic
+        logging.warning(msg.topic, msg.payload)
         if msg.topic in config["TOPICS"]:
             if msg.payload != "" and msg.payload != b"":
                 last_changed = int(time())
